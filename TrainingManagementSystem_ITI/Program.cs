@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TrainingManagementSystem_ITI.Data;
+
 namespace TrainingManagementSystem_ITI
 {
     public class Program
@@ -8,6 +11,13 @@ namespace TrainingManagementSystem_ITI
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            #region connection string configration 
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            #endregion
+
+
 
             var app = builder.Build();
 
