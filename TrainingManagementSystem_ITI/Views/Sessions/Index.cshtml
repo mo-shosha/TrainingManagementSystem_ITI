@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Session>
+@{
+    ViewData["Title"] = "Sessions";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Sessions</h2>
+    </div>
+    <div class="col-md-6 text-end">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Session
+        </a>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-6">
+        <form asp-action="Index" method="get" class="d-flex">
+            <input type="text" name="searchTerm" value="@ViewBag.SearchTerm"
+                   class="form-control" placeholder="Search by course name..." />
+            <button type="submit" class="btn btn-outline-secondary ms-2">Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary ms-2">Clear</a>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive mt-3">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Course</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var session in Model)
+            {
+                <tr>
+                    <td>@session.Course?.Name</td>
+                    <td>@session.StartDate.ToString("MMM dd, yyyy HH:mm")</td>
+                    <td>@session.EndDate.ToString("MMM dd, yyyy HH:mm")</td>
+                    <td>
+                        @{
+                            var now = DateTime.Now;
+                            string status = "";
+                            string badgeClass = "";
+
+                            if (now < session.StartDate)
+                            {
+                                status = "Upcoming";
+                                badgeClass = "bg-primary";
+                            }
+                            else if (now >= session.StartDate && now <= session.EndDate)
+                            {
+                                status = "In Progress";
+                                badgeClass = "bg-success";
+                            }
+                            else
+                            {
+                                status = "Completed";
+                                badgeClass = "bg-secondary";
+                            }
+                        }
+                        <span class="badge @badgeClass">@status</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary" type="button" id="dropdownMenuButton-@session.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@session.Id">
+                                <li>
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@session.Id">
+                                        <i class="bi bi-pencil-square me-2"></i> Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <form asp-action="Delete" asp-route-id="@session.Id" method="post" class="d-inline"
+                                          asp-antiforgery="true"
+                                          onsubmit="return confirm('Are you sure you want to delete this course?')">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-trash me-2"></i> Delete
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script src="~/js/Session.js"></script>
+}
