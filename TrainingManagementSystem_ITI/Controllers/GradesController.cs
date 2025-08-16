@@ -34,7 +34,8 @@ namespace TrainingManagementSystem_ITI.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Sessions = await _unitOfWork.SessionRepository.GetAllAsync(s => s.Course);
-            ViewBag.Trainees = await _unitOfWork.CourseRepository.GetAllAsync();
+            ViewBag.Trainees = (await _unitOfWork.UserRepository.GetAllAsync())
+                .Where(u => u.Role == "Trainee");
             return View();
 
         }
@@ -44,12 +45,20 @@ namespace TrainingManagementSystem_ITI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Grade grade)
         {
+
             if (ModelState.IsValid)
             {
-                await _unitOfWork.GradeRepository.AddAsync(grade);
+                await _unitOfWork.GradeRepository.AddAsync(new Grade
+                {
+                    SessionId = grade.SessionId,
+                    TraineeId = grade.TraineeId,
+                    Value = grade.Value
+                });
                 await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Sessions = await _unitOfWork.SessionRepository.GetAllAsync(s => s.Course);
+            ViewBag.Trainees = await _unitOfWork.UserRepository.GetAllAsync();
             return View(grade);
         }
 
@@ -83,7 +92,7 @@ namespace TrainingManagementSystem_ITI.Controllers
         // GET: Grades/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var grade = await _unitOfWork.GradeRepository.GetByIdAsync(id, g => g.Trainee, g => g.Session);
+            var grade = await _unitOfWork.GradeRepository.GetByIdAsync(id, g => g.Trainee, g => g.Session.Course);
             if (grade == null) return NotFound();
 
             return View(grade);

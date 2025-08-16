@@ -1,5 +1,51 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model TrainingManagementSystem_ITI.Models.Grade
+
+<div class="container mt-4">
+    <h2>Edit Grade</h2>
+    <hr />
+
+    <form asp-action="Edit" method="post" class="row g-3">
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Trainee -->
+        <div class="col-md-6">
+            <label asp-for="TraineeId" class="form-label">Trainee</label>
+            <select asp-for="TraineeId" class="form-select"
+                    asp-items="@(new SelectList(ViewBag.Trainees, "Id", "Name", Model.TraineeId))">
+                <option value="">-- Select Trainee --</option>
+            </select>
+            <span asp-validation-for="TraineeId" class="text-danger"></span>
+        </div>
+
+        <!-- Session -->
+        <div class="col-md-6">
+            <label asp-for="SessionId" class="form-label">Session (Course)</label>
+            <select asp-for="SessionId" class="form-select"
+                    asp-items="@(new SelectList(ViewBag.Sessions, "Id", "Course.Name", Model.SessionId))">
+                <option value="">-- Select Session --</option>
+            </select>
+            <span asp-validation-for="SessionId" class="text-danger"></span>
+        </div>
+
+        <!-- Grade Value -->
+        <div class="col-md-6">
+            <label asp-for="Value" class="form-label">Grade Value</label>
+            <input asp-for="Value" class="form-control" placeholder="Enter grade value" />
+            <span asp-validation-for="Value" class="text-danger"></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle"></i> Update
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
