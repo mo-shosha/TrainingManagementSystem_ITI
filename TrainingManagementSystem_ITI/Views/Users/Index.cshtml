@@ -1,0 +1,61 @@
+﻿@using TrainingManagementSystem_ITI.View_Models.Users
+@model List<UserViewModel>
+
+<div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>User Management</h2>
+        <a asp-action="Create" class="btn btn-primary d-inline-flex align-items-center gap-2">
+            <i class="bi bi-plus-lg"></i> Add User
+        </a>
+    </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(M => M.FirstOrDefault().Name)</th>
+                <th>@Html.DisplayNameFor(M => M.FirstOrDefault().Email)</th>
+                <th>@Html.DisplayNameFor(M => M.FirstOrDefault().Role)</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary" type="button" id="dropdownMenuButton-@user.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@user.Id">
+                                <li>
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-Id="@user.Id">
+                                        <i class="bi bi-pencil-square me-2"></i> Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-action="Delete" asp-route-Id="@user.Id" return false; onclick="confirmDelete(event,'@user.Name')">
+                                        <i class="bi bi-trash me-2"></i> Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script>
+        function confirmDelete(e,UserName){
+            let deleteResult =  confirm(`Are You Sure To Delete ${UserName}`);
+            if(deleteResult==false){
+                e.preventDefault();
+            }
+        }
+    </script>
+}

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace TrainingManagementSystem_ITI.Models
 {
-    public class User
+    public partial class User
     {
         public int Id { get; set; }
 
@@ -15,10 +16,11 @@ namespace TrainingManagementSystem_ITI.Models
         public string Email { get; set; }
 
         [Required]
-        public string Role { get; set; } 
-
-        public ICollection<Course> Courses { get; set; }
-        public ICollection<Grade> Grades { get; set; }
+        public string Role { get; set; }
+        [ValidateNever]
+        public ICollection<Course>? Courses { get; set; }
+        [ValidateNever]
+        public ICollection<Grade>? Grades { get; set; }
     }
 
 }
