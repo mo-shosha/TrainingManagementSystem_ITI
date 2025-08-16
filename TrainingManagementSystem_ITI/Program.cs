@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TrainingManagementSystem_ITI.Data;
+using TrainingManagementSystem_ITI.Interfaces.IRepository;
+using TrainingManagementSystem_ITI.Repository;
 
 namespace TrainingManagementSystem_ITI
 {
@@ -16,7 +18,7 @@ namespace TrainingManagementSystem_ITI
             builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             #endregion
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             var app = builder.Build();

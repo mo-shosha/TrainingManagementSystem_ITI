@@ -4,5 +4,6 @@ namespace TrainingManagementSystem_ITI.Interfaces.IRepository
 {
     public interface IGradeRepository:IBaseRepository<Grade>
     {
+        Task<IReadOnlyList<Grade>> GetAllWithDetailsAsync();
     }
 }
