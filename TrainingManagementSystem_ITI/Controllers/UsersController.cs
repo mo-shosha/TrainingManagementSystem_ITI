@@ -73,7 +73,7 @@ namespace TrainingManagementSystem_ITI.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Edit(User UserFromClientThatUpdated)
+        public async Task<IActionResult> Edit(User UserFromClientThatUpdated)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace TrainingManagementSystem_ITI.Controllers
                 {
                     return View(UserFromClientThatUpdated);
                 }
-                UnitOfWork.UserRepository.UpdateAsync(UserFromClientThatUpdated);
+                await UnitOfWork.UserRepository.UpdateAsync(UserFromClientThatUpdated);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
