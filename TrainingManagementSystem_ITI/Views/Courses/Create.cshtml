@@ -1,0 +1,53 @@
+﻿@using TrainingManagementSystem_ITI.ViewModel
+@model CourseViewModel
+<h2>Create Course</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Category" class="control-label"></label>
+        <input asp-for="Category" class="form-control" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="InstructorId" class="form-label"></label>
+        <select asp-for="InstructorId" class="form-select">
+            <option value="">Select an instructor</option>
+            @foreach (var instructor in Model.AvailableInstructors)
+            {
+                <option value="@instructor.Id">@instructor.Name</option>
+            }
+        </select>
+        <span asp-validation-for="InstructorId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i> Create
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    <script>
+        $('#Name').on('blur', function() {
+            var courseName = $(this).val();
+            if (courseName.length >= 3) {
+                $.get('@Url.Action("CheckCourseName", "Courses")', { name: courseName }, function(data) {
+                    if (!data.isUnique) {
+                        $('#Name').addClass('is-invalid');
+                        $('.field-validation-valid[data-valmsg-for="Name"]').text('Course name must be unique').addClass('text-danger');
+                    } else {
+                        $('#Name').removeClass('is-invalid');
+                        $('.field-validation-valid[data-valmsg-for="Name"]').text('').removeClass('text-danger');
+                    }
+                });
+            }
+        });
+    </script>
+}

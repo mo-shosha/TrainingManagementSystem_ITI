@@ -1,0 +1,47 @@
+﻿@using TrainingManagementSystem_ITI.ViewModel
+@model CourseViewModel
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<h2>Edit Course</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Category" class="form-label"></label>
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="InstructorId" class="form-label"></label>
+                <select asp-for="InstructorId" class="form-select">
+                    <option value="">Select an instructor</option>
+                    @foreach (var instructor in Model.AvailableInstructors)
+                    {
+                        <option value="@instructor.Id">@instructor.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="InstructorId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-pencil-square me-1"></i> Update
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

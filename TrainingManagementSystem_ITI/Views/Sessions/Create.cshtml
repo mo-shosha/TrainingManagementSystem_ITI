@@ -1,0 +1,47 @@
+﻿@using TrainingManagementSystem_ITI.ViewModel
+@model SessionViewModel
+
+@{
+    ViewData["Title"] = "Create Session";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Create New Session</h2>
+
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="CourseId" class="form-label"></label>
+            <select asp-for="CourseId" class="form-select"
+                    asp-items="@(new SelectList(Model.AvailableCourses, "Id", "Name"))">
+                <option value="">-- Select a course --</option>
+            </select>
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StartDate" class="form-label"></label>
+            <input asp-for="StartDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EndDate" class="form-label"></label>
+            <input asp-for="EndDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Create
+        </button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
