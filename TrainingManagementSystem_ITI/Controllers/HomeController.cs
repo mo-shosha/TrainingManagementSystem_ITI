@@ -3,23 +3,53 @@ using Microsoft.AspNetCore.Mvc;
 using TrainingManagementSystem_ITI.Models;
 using TrainingManagementSystem_ITI.Data;
 using System.Linq;
+using TrainingManagementSystem_ITI.Interfaces.IRepository;
+using TrainingManagementSystem_ITI.ViewModel;
 
 namespace TrainingManagementSystem_ITI.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly AppDbContext _context; 
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger, AppDbContext context)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+
+            var totalStudents = (await _unitOfWork.UserRepository.GetAllAsync())
+                                .Where(u => u.Role == "Trainee")
+                                .Count();
+
+
+            var totalCourses = await _unitOfWork.CourseRepository.CountAsync();
+
+
+            var startOfWeek = DateHelper.StartOfWeek(DateTime.Now, DayOfWeek.Saturday);
+            var endOfWeek = startOfWeek.AddDays(7);
+
+            var sessionsThisWeek = (await _unitOfWork.SessionRepository.GetAllAsync())
+                                    .Where(s => s.StartDate >= startOfWeek && s.EndDate < endOfWeek)
+                                    .Count();
+
+            var grades = await _unitOfWork.GradeRepository.GetAllAsync();
+            var averageGrade = grades.Any() ? grades.Average(g => g.Value) : 0;
+
+            var dashboardVM = new DashboardViewModel
+            {
+                TotalStudents = totalStudents,
+                TotalCourses = totalCourses,
+                SessionsThisWeek = sessionsThisWeek,
+                AverageGrade = averageGrade
+            };
+
+            return View(dashboardVM);
+
         }
 
         public IActionResult Privacy()
@@ -33,19 +63,15 @@ namespace TrainingManagementSystem_ITI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult TestDb()
-        {
-            var result = new
-            {
-                Courses = _context.Courses
-                                  .Select(c => new { c.Id, c.Name, c.Category, Instructor = c.Instructor.Name })
-                                  .ToList(),
-                Grades = _context.Grades
-                                 .Select(g => new { g.Id, g.Value, SessionId = g.SessionId, Trainee = g.Trainee.Name })
-                                 .ToList()
-            };
 
-            return Json(result);
+
+        private class DateHelper
+        {
+            public static DateTime StartOfWeek(DateTime dt, DayOfWeek startOfWeek)
+            {
+                int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+                return dt.AddDays(-1 * diff).Date;
+            }
         }
     }
 }

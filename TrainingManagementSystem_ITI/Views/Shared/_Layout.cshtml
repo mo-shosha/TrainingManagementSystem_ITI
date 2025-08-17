@@ -88,9 +88,10 @@
             <a class="nav-link @(currentController == "Grades" ? "active" : "")" asp-controller="Grades" asp-action="Index">
                 <i class="bi bi-award me-2"></i> Grades
             </a>
-            <a class="nav-link @(currentController == "Developer" ? "active" : "")" asp-controller="Developer" asp-action="Index">
-                <i class="bi bi-code-slash me-2"></i> Developer
-            </a>
+            @* <a class="nav-link @(currentController == "Developer" ? "active" : "")" asp-controller="Developer" asp-action="Index">
+                    <i class="bi bi-code-slash me-2"></i> Developer
+                </a> 
+            *@
         </nav>
     </div>
 

@@ -1,8 +1,62 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model TrainingManagementSystem_ITI.ViewModel.DashboardViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <div class="card shadow-sm p-4 mb-4">
+        <h3 class="fw-bold">Dashboard Overview</h3>
+        <p class="text-muted">Welcome to your education management dashboard. Here's what's happening today.</p>
+    </div>
+
+    <div class="row text-center">
+        <!-- Total Students -->
+        <div class="col-md-3 mt-3">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mb-2">
+                        <i class="bi bi-people fs-1 text-primary"></i>
+                    </div>
+                    <h6 class="text-muted">Total Students</h6>
+                    <h3 class="fw-bold">@Model.TotalStudents</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Courses -->
+        <div class="col-md-3 mt-3">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mb-2">
+                        <i class="bi bi-journal-bookmark fs-1 text-info"></i>
+                    </div>
+                    <h6 class="text-muted">Active Courses</h6>
+                    <h3 class="fw-bold">@Model.TotalCourses</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sessions This Week -->
+        <div class="col-md-3 mt-3">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mb-2">
+                        <i class="bi bi-calendar-event fs-1 text-danger"></i>
+                    </div>
+                    <h6 class="text-muted">Sessions This Week</h6>
+                    <h3 class="fw-bold">@Model.SessionsThisWeek</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Average Grade -->
+        <div class="col-md-3 mt-3">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mb-2">
+                        <i class="bi bi-mortarboard fs-1 text-warning"></i>
+                    </div>
+                    <h6 class="text-muted">Average Grade</h6>
+                    <h3 class="fw-bold">@Model.AverageGrade.ToString("0.0")%</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
